@@ -17,6 +17,8 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.widget.ShareActionProvider;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -30,18 +32,22 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
 	// XML node keys
 	static final String KEY_ITEM = "rom"; // parent node
+	private ShareActionProvider mShareActionProvider;
 
 	private DrawerLayout mDrawerLayout;
 	public static ListView mDrawerList;
@@ -185,7 +191,7 @@ public class MainActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	public void SelectItem(final int possition) {
@@ -250,6 +256,14 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// The action bar home/up action should open or close the drawer.
 		// ActionBarDrawerToggle will take care of this.
+		
+		switch (item.getItemId()) {
+			case R.id.delete_xml:
+			     Toast.makeText(getApplicationContext(), 
+                         "XML CLICK", Toast.LENGTH_LONG).show();
+		}
+
+		
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
