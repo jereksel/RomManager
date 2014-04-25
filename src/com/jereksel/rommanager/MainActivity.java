@@ -83,7 +83,7 @@ public class MainActivity extends Activity {
 
 		final DownloadXMLs[] array = new DownloadXMLs[(Data.xml).length];
 
-		for (int i = 0; i < (Data.xml).length - 1; i++) {
+		for (int i = 0; i <= (Data.xml).length - 1; i++) {
 			Log.w("TESCIK", String.valueOf(i));
 			array[i] = new DownloadXMLs(i, context);
 			(array[i]).start();
@@ -124,7 +124,7 @@ public class MainActivity extends Activity {
 				 * 
 				 * } } catch (Exception e) { Log.e("Error: ", e.getMessage()); }
 				 */
-				for (int i = 0; i < (Data.xml).length - 1; i++) {
+				for (int i = 0; i <= (Data.xml).length - 1; i++) {
 					try {
 						array[i].join();
 					} catch (InterruptedException e) {
@@ -301,8 +301,6 @@ public class MainActivity extends Activity {
 
 		}
 	}
-
-	// Czytaj wiêcej na: http://javastart.pl/narzedzia/asynctask/#ixzz2zqbHTIQJ
 
 	private class DownloadXMLs extends Thread {
 
