@@ -7,7 +7,6 @@ package com.jereksel.rommanager;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 
@@ -15,10 +14,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.ProgressDialog;
 import android.content.res.Configuration;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -56,6 +53,8 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+	    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+	    StrictMode.setThreadPolicy(policy);
 
 		// Initializing
 		dataList = new ArrayList<DrawerItem>();
@@ -67,50 +66,40 @@ public class MainActivity extends Activity {
 				GravityCompat.START);
 				
 		
-	    new Thread() {
-	        public void run() {
+		new Thread() {
+			public void run() {
 
-	         	dataList = new ArrayList<DrawerItem>();
+				dataList = new ArrayList<DrawerItem>();
 	        	
-	    		dataList.add(new DrawerItem("Status", R.drawable.ic_action_settings));
+				dataList.add(new DrawerItem("Status", R.drawable.ic_action_settings));
 
-	    		Log.w("myApp", "TEST2");
+				Log.w("myApp", "TEST2");
 	    		
-	            XMLParser parser = new XMLParser();
-	            String xml = parser.getXmlFromUrl(URL); // getting XML
-	            Document doc = parser.getDomElement(xml); // getting DOM element
+				XMLParser parser = new XMLParser();
+				String xml = parser.getXmlFromUrl(URL); // getting XML
+				Document doc = parser.getDomElement(xml); // getting DOM element
 
-	            NodeList nl = doc.getElementsByTagName("rom");
-	            
-	            for (int i = 0; i < nl.getLength(); i++) {
-	            	Element e = (Element) nl.item(i);
-	            	dataList.add(new DrawerItem(parser.getValue(e, "name"), R.drawable.ic_action_settings));
-	            }
+				NodeList nl = doc.getElementsByTagName("rom");
+		            
+				for (int i = 0; i < nl.getLength(); i++) {
+					Element e = (Element) nl.item(i);
+					dataList.add(new DrawerItem(parser.getValue(e, "name"), R.drawable.ic_action_settings));
+				}
 	        	
 	        	
-	                    runOnUiThread(new Runnable() {
-
-	                        @Override
-	                        public void run() {
-	                        	Log.w("myApp", "TEST3");
-	            		        CustomDrawerAdapter adapter = new CustomDrawerAdapter(context, R.layout.custom_drawer_item,
-	            		    			dataList);
-
-	            		        	
-	            		        mDrawerList.setAdapter(adapter);
-	            		        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-	            		        Log.w("myApp", "KONIEC");
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Log.w("myApp", "TEST3");
+						CustomDrawerAdapter adapter = new CustomDrawerAdapter(context, R.layout.custom_drawer_item,
+								dataList);
+								mDrawerList.setAdapter(adapter);
+								mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+								Log.w("myApp", "KONIEC");
 	            		        
-	            				if (savedInstanceState == null) {
-	            					SelectItem(0);
-	            				}
-	                        }
-	                    });
-
-	                }
-	            
-	        
-	    }.start();
+								if (savedInstanceState == null) {
+									SelectItem(0);
+		}}});}}.start();
 
 		
 //		new FirstDrawerCreater(this).execute();
@@ -149,28 +138,48 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	public void SelectItem(int possition) {
+	public void SelectItem(final int possition) {
 
+		new Thread() {
+			public void run() {
+		
 		Fragment fragment = null;
-		Bundle args = new Bundle();
+		
+		final Bundle args = new Bundle();
 
 		
 		if (possition==0) {
 			fragment = new Status();
 		}
 		else {
+
 			fragment = new ROMList();
 			args.putString(ROMList.ROM_NAME, dataList.get(possition).getItemName());
+
 		}
+		
+
+		
 		fragment.setArguments(args);
 		FragmentManager frgManager = getFragmentManager();
-		frgManager.beginTransaction().replace(R.id.content_frame, fragment)
-				.commit();
+		
+		
+		final FragmentManager frgManagerFinal = frgManager;
+		final Fragment fragmentfinal = fragment;
 
+				frgManagerFinal.beginTransaction().replace(R.id.content_frame, fragmentfinal)
+				.commit();
+				
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+				
 		mDrawerList.setItemChecked(possition, true);
 		setTitle(dataList.get(possition).getItemName());
 		mDrawerLayout.closeDrawer(mDrawerList);
 
+			}});}}.start();
+		
 	}
 
 	@Override

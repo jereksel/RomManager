@@ -1,7 +1,5 @@
 package com.jereksel.rommanager;
 
-import com.jereksel.rommanager.RomDetailed;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -10,6 +8,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,18 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.app.ListActivity;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 public class ROMList extends Fragment {
@@ -51,6 +42,7 @@ public class ROMList extends Fragment {
 	public static final String IMAGE_RESOURCE_ID = "iconResourceID";
 	public static final String ITEM_NAME = "itemName";
 
+	private boolean valid = true;
 	private String xdathread="";
 	private String author="";
 	
@@ -61,17 +53,14 @@ public class ROMList extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, final ViewGroup container,
 			Bundle savedInstanceState) {
-
-		Toast.makeText(container.getContext(), getArguments().getString(ROM_NAME), 
-     		   Toast.LENGTH_SHORT).show();
 		
 		String rooomname = getArguments().getString(ROM_NAME);
 		Log.w("myApp", rooomname);
 	    ArrayList<HashMap<String, String>> menuItems = new ArrayList<HashMap<String, String>>();
 	    
-	    String URL="http://192.168.1.2/cm.xml";
+	    String URL="";
 	    
-	    if(rooomname.equals("CM")){URL = "https://raw.githubusercontent.com/jereksel/YouShouldNotEnterForNow/master/cm.xml";}
+	    if(rooomname.equals("CM")){URL = "http://192.168.1.2/cm.xml";}
 	    else if(rooomname.equals("PAC")){URL = "http://192.168.1.2/pac.xml";}
 	    else if(rooomname.equals("AOSP")){URL = "http://192.168.1.2/aosp.xml";}
 
@@ -83,10 +72,20 @@ public class ROMList extends Fragment {
 	    
         XMLParser parser = new XMLParser();
         String xml = parser.getXmlFromUrl(URL); // getting XML
+
         Document doc = parser.getDomElement(xml); // getting DOM element
  
+        
         NodeList nl = doc.getElementsByTagName(KEY_PARENT);
+        
+        if (nl.getLength()==0) valid = false;
 	    
+        if(!valid)
+        {
+            Toast.makeText(container.getContext(), 
+            		"ERROR", Toast.LENGTH_LONG).show();
+        }
+        
         for (int i = 0; i < nl.getLength(); i++) {
             // creating new HashMap
             HashMap<String, String> map = new HashMap<String, String>();
@@ -101,10 +100,11 @@ public class ROMList extends Fragment {
         
         nl = doc.getElementsByTagName(KEY_OTHER_DATA);
         
-        xdathread = parser.getValue((Element) nl.item(0), "xda-thread");
-        author = parser.getValue((Element) nl.item(0), "author");
+        if(valid) {
+        	xdathread = parser.getValue((Element) nl.item(0), "xda-thread");
+        	author = parser.getValue((Element) nl.item(0), "author");
+        }
 
-          
 		View view = inflater.inflate(R.layout.romlist_layout, container, false);
 		
 	    ListView lv = (ListView) view.findViewById(R.id.listview);

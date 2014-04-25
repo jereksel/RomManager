@@ -1,7 +1,6 @@
 package com.jereksel.rommanager;
  
 import java.util.ArrayList;
-import java.util.List;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -11,7 +10,6 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ListView;
-import android.widget.Toast;
  
 public class FirstDrawerCreater extends AsyncTask<Void, Void, Void> {
  
@@ -72,10 +70,6 @@ public class FirstDrawerCreater extends AsyncTask<Void, Void, Void> {
     return null;
     
     }
-    
-//Czytaj wiêcej na: http://javastart.pl/narzedzia/asynctask/#ixzz2zqbOkxyg
 
  
 }
-
-//Czytaj wiêcej na: http://javastart.pl/narzedzia/asynctask/#ixzz2zqYWePXw

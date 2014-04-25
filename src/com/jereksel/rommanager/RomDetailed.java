@@ -1,14 +1,10 @@
 package com.jereksel.rommanager;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class RomDetailed  extends Activity {
@@ -16,7 +12,6 @@ public class RomDetailed  extends Activity {
 	private String download;
 	private String version;
 	private String author;
-	private String xdathread;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -31,7 +26,7 @@ public class RomDetailed  extends Activity {
         version = in.getStringExtra("VERSION");
         author = in.getStringExtra("AUTHOR");
         download = in.getStringExtra("DOWNLOAD");
-        xdathread = in.getStringExtra("XDA");
+        in.getStringExtra("XDA");
         
         // Displaying all values on the screen
         TextView name = (TextView) findViewById(R.id.rom_name);
