@@ -12,21 +12,22 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
-import java.net.URL;
-import android.os.Bundle;
-import android.os.Environment;
-import android.os.StrictMode;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.res.Configuration;
+import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -44,7 +45,7 @@ public class MainActivity extends Activity {
 	// XML node keys
 	static final String KEY_ITEM = "rom"; // parent node
 
-	public static final int PLEASE_WAIT_DIALOG = 1;
+	// public static final int PLEASE_WAIT_DIALOG = 1;
 
 	private DrawerLayout mDrawerLayout;
 	public static ListView mDrawerList;
@@ -53,6 +54,8 @@ public class MainActivity extends Activity {
 	private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
 	CustomDrawerAdapter adapter;
+
+	private ProgressDialog pDialog;
 
 	List<DrawerItem> dataList;
 
@@ -75,6 +78,19 @@ public class MainActivity extends Activity {
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
 				GravityCompat.START);
 
+		pDialog = ProgressDialog.show(context, "Downloading/Preparing Data..",
+				"Please wait", true, false);
+
+		final DownloadXMLs[] array = new DownloadXMLs[(Data.xml).length];
+
+		for (int i = 0; i < (Data.xml).length - 1; i++) {
+			Log.w("TESCIK", String.valueOf(i));
+			array[i] = new DownloadXMLs(i, context);
+			(array[i]).start();
+		}
+
+		Log.w("myApp", "TEST1");
+
 		new Thread() {
 			public void run() {
 
@@ -87,50 +103,40 @@ public class MainActivity extends Activity {
 
 				XMLParser parser = new XMLParser();
 				// String xml = parser.getXmlFromUrl(URL); // getting XML
-
-				int count;
-				try {
-					URL url = new URL(URL);
-					File file2 = new File("/sdcard/rom.xml");
-					if (!(file2.exists())) {
-						URLConnection conection = url.openConnection();
-						conection.connect();
-						// getting file length
-						int lenghtOfFile = conection.getContentLength();
-
-						InputStream input = new BufferedInputStream(
-								url.openStream(), 8192);
-						OutputStream output = new FileOutputStream(
-								"/sdcard/rom.xml");
-
-						byte data[] = new byte[1024];
-
-						long total = 0;
-
-						while ((count = input.read(data)) != -1) {
-							total += count;
-							// publishing the progress....
-							// After this onProgressUpdate will be called
-							// writing data to file
-							output.write(data, 0, count);
-						}
-
-						// flushing output
-						output.flush();
-
-						// closing streams
-						output.close();
-						input.close();
+				/*
+				 * int count; try { URL url = new URL(URL); File file2 = new
+				 * File(context.getFilesDir(), "rom.xml"); if
+				 * (!(file2.exists())) { URLConnection conection =
+				 * url.openConnection(); String location =
+				 * file2.getAbsolutePath(); conection.connect(); InputStream
+				 * input = new BufferedInputStream( url.openStream(), 8192);
+				 * OutputStream output = new FileOutputStream(location);
+				 * 
+				 * byte data[] = new byte[1024];
+				 * 
+				 * while ((count = input.read(data)) != -1) { // publishing the
+				 * progress.... // After this onProgressUpdate will be called //
+				 * writing data to file output.write(data, 0, count); }
+				 * 
+				 * // flushing output output.flush();
+				 * 
+				 * // closing streams output.close(); input.close();
+				 * 
+				 * } } catch (Exception e) { Log.e("Error: ", e.getMessage()); }
+				 */
+				for (int i = 0; i < (Data.xml).length - 1; i++) {
+					try {
+						array[i].join();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-				} catch (Exception e) {
-					Log.e("Error: ", e.getMessage());
 				}
 
-				String xmlPath = "/sdcard/rom.xml";
 				BufferedReader xml = null;
 				StringBuilder total = null;
 				try {
-					File file = new File(xmlPath);
+					File file = new File(context.getFilesDir(), "rom.xml");
 					InputStream inputStream = new FileInputStream(file);
 					xml = new BufferedReader(new InputStreamReader(inputStream));
 					total = new StringBuilder();
@@ -157,6 +163,7 @@ public class MainActivity extends Activity {
 					dataList.add(new DrawerItem(parser.getValue(e, "name"),
 							R.drawable.ic_action_settings));
 				}
+				pDialog.dismiss();
 
 				runOnUiThread(new Runnable() {
 					@Override
@@ -241,14 +248,14 @@ public class MainActivity extends Activity {
 					@Override
 					public void run() {
 
-						mDrawerList.setItemChecked(possition, true);
-						setTitle(dataList.get(possition).getItemName());
-						mDrawerLayout.closeDrawer(mDrawerList);
-
 					}
 				});
 			}
 		}.start();
+
+		mDrawerList.setItemChecked(possition, true);
+		setTitle(dataList.get(possition).getItemName());
+		mDrawerLayout.closeDrawer(mDrawerList);
 
 	}
 
@@ -296,5 +303,56 @@ public class MainActivity extends Activity {
 	}
 
 	// Czytaj wiêcej na: http://javastart.pl/narzedzia/asynctask/#ixzz2zqbHTIQJ
+
+	private class DownloadXMLs extends Thread {
+
+		int i;
+		MainActivity context;
+
+		public DownloadXMLs(int i, MainActivity context) {
+
+			this.i = i;
+			this.context = context;
+
+		}
+
+		public void run() {
+
+			int count;
+			try {
+				URL url = new URL(Data.downloadxml[i]);
+				File file2 = new File(context.getFilesDir(), Data.xml[i]);
+				if (!(file2.exists())) {
+					URLConnection conection = url.openConnection();
+					String location = file2.getAbsolutePath();
+					conection.connect();
+					InputStream input = new BufferedInputStream(
+							url.openStream(), 8192);
+					OutputStream output = new FileOutputStream(location);
+
+					byte data[] = new byte[1024];
+
+					while ((count = input.read(data)) != -1) {
+						// publishing the progress....
+						// After this onProgressUpdate will be called
+						// writing data to file
+						output.write(data, 0, count);
+					}
+
+					// flushing output
+					output.flush();
+
+					// closing streams
+					output.close();
+					input.close();
+
+				}
+			} catch (Exception e) {
+				Log.e("Error: ", e.getMessage());
+			}
+
+			Log.w("Zakoñczono: ", String.valueOf(i));
+		}
+	}
 
 }
