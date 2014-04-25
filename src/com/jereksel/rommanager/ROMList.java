@@ -108,6 +108,7 @@ public class ROMList extends Fragment {
 		NodeList nl = doc.getElementsByTagName(KEY_PARENT);
 
 		if (nl.getLength() == 0)
+			// XML file is not valid
 			valid = false;
 
 		if (!valid) {
@@ -141,7 +142,7 @@ public class ROMList extends Fragment {
 		lv.setAdapter(new SimpleAdapter(container.getContext(), menuItems,
 				R.layout.list_item, new String[] { KEY_NAME, KEY_DOWNLOAD },
 				new int[] { R.id.label, R.id.download }));
-		
+
 		lv.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -150,10 +151,6 @@ public class ROMList extends Fragment {
 				// getting values from selected ListItem
 				String version = ((TextView) view.findViewById(R.id.label))
 						.getText().toString();
-
-				// TOAST
-				// Toast.makeText(container.getContext(), name,
-				// Toast.LENGTH_LONG).show();
 
 				String download = ((TextView) view.findViewById(R.id.download))
 						.getText().toString();
@@ -169,7 +166,6 @@ public class ROMList extends Fragment {
 
 			}
 		});
-
 
 		return view;
 

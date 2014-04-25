@@ -40,12 +40,8 @@ import android.widget.ListView;
 
 public class MainActivity extends Activity {
 
-	// All static variables
-	public static final String URL = "http://jereksel.cba.pl/android/rom.xml";
 	// XML node keys
 	static final String KEY_ITEM = "rom"; // parent node
-
-	// public static final int PLEASE_WAIT_DIALOG = 1;
 
 	private DrawerLayout mDrawerLayout;
 	public static ListView mDrawerList;
@@ -101,29 +97,7 @@ public class MainActivity extends Activity {
 
 				Log.w("myApp", "TEST2");
 
-				XMLParser parser = new XMLParser();
-				// String xml = parser.getXmlFromUrl(URL); // getting XML
-				/*
-				 * int count; try { URL url = new URL(URL); File file2 = new
-				 * File(context.getFilesDir(), "rom.xml"); if
-				 * (!(file2.exists())) { URLConnection conection =
-				 * url.openConnection(); String location =
-				 * file2.getAbsolutePath(); conection.connect(); InputStream
-				 * input = new BufferedInputStream( url.openStream(), 8192);
-				 * OutputStream output = new FileOutputStream(location);
-				 * 
-				 * byte data[] = new byte[1024];
-				 * 
-				 * while ((count = input.read(data)) != -1) { // publishing the
-				 * progress.... // After this onProgressUpdate will be called //
-				 * writing data to file output.write(data, 0, count); }
-				 * 
-				 * // flushing output output.flush();
-				 * 
-				 * // closing streams output.close(); input.close();
-				 * 
-				 * } } catch (Exception e) { Log.e("Error: ", e.getMessage()); }
-				 */
+
 				for (int i = 0; i <= (Data.xml).length - 1; i++) {
 					try {
 						array[i].join();
@@ -136,7 +110,7 @@ public class MainActivity extends Activity {
 				BufferedReader xml = null;
 				StringBuilder total = null;
 				try {
-					File file = new File(context.getFilesDir(), "rom.xml");
+					File file = new File(context.getFilesDir(), Data.xml[0]);
 					InputStream inputStream = new FileInputStream(file);
 					xml = new BufferedReader(new InputStreamReader(inputStream));
 					total = new StringBuilder();
@@ -149,7 +123,7 @@ public class MainActivity extends Activity {
 					Log.e("Error: ", e.getMessage());
 				}
 
-				// String xml = parser.getXmlFromUrl(URL);
+				XMLParser parser = new XMLParser();
 				Document doc = parser.getDomElement(total.toString()); // getting
 																		// DOM
 																		// element
@@ -184,8 +158,6 @@ public class MainActivity extends Activity {
 			}
 		}.start();
 
-		// new FirstDrawerCreater(this).execute();
-
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
@@ -218,6 +190,7 @@ public class MainActivity extends Activity {
 
 	public void SelectItem(final int possition) {
 
+		//Maybe this Thread is not necessary
 		new Thread() {
 			public void run() {
 
@@ -244,12 +217,6 @@ public class MainActivity extends Activity {
 				frgManagerFinal.beginTransaction()
 						.replace(R.id.content_frame, fragmentfinal).commit();
 
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-
-					}
-				});
 			}
 		}.start();
 
@@ -296,7 +263,6 @@ public class MainActivity extends Activity {
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
 
-			// Log.d("myApp",view.toString());
 			SelectItem(position);
 
 		}
