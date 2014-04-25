@@ -4,10 +4,20 @@ package com.jereksel.rommanager;
  * http://www.tutecentral.com/android-custom-navigation-drawer/
  */
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.net.URL;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.StrictMode;
 
 import org.w3c.dom.Document;
@@ -29,14 +39,13 @@ import android.widget.ListView;
 
 public class MainActivity extends Activity {
 
-    // All static variables
-    public static final String URL = "http://192.168.1.2/rom.xml";
-    // XML node keys
-    static final String KEY_ITEM = "rom"; // parent node
-    static final String KEY_PARENT = "rom"; // parent node
+	// All static variables
+	public static final String URL = "http://jereksel.cba.pl/android/rom.xml";
+	// XML node keys
+	static final String KEY_ITEM = "rom"; // parent node
 
-    public static final int PLEASE_WAIT_DIALOG = 1;
-	
+	public static final int PLEASE_WAIT_DIALOG = 1;
+
 	private DrawerLayout mDrawerLayout;
 	public static ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -53,8 +62,9 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-	    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-	    StrictMode.setThreadPolicy(policy);
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+				.permitAll().build();
+		StrictMode.setThreadPolicy(policy);
 
 		// Initializing
 		dataList = new ArrayList<DrawerItem>();
@@ -64,46 +74,110 @@ public class MainActivity extends Activity {
 
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
 				GravityCompat.START);
-				
-		
+
 		new Thread() {
 			public void run() {
 
 				dataList = new ArrayList<DrawerItem>();
-	        	
-				dataList.add(new DrawerItem("Status", R.drawable.ic_action_settings));
+
+				dataList.add(new DrawerItem("Status",
+						R.drawable.ic_action_settings));
 
 				Log.w("myApp", "TEST2");
-	    		
-				XMLParser parser = new XMLParser();
-				String xml = parser.getXmlFromUrl(URL); // getting XML
-				Document doc = parser.getDomElement(xml); // getting DOM element
 
-				NodeList nl = doc.getElementsByTagName("rom");
-		            
+				XMLParser parser = new XMLParser();
+				// String xml = parser.getXmlFromUrl(URL); // getting XML
+
+				int count;
+				try {
+					URL url = new URL(URL);
+					File file2 = new File("/sdcard/rom.xml");
+					if (!(file2.exists())) {
+						URLConnection conection = url.openConnection();
+						conection.connect();
+						// getting file length
+						int lenghtOfFile = conection.getContentLength();
+
+						InputStream input = new BufferedInputStream(
+								url.openStream(), 8192);
+						OutputStream output = new FileOutputStream(
+								"/sdcard/rom.xml");
+
+						byte data[] = new byte[1024];
+
+						long total = 0;
+
+						while ((count = input.read(data)) != -1) {
+							total += count;
+							// publishing the progress....
+							// After this onProgressUpdate will be called
+							// writing data to file
+							output.write(data, 0, count);
+						}
+
+						// flushing output
+						output.flush();
+
+						// closing streams
+						output.close();
+						input.close();
+					}
+				} catch (Exception e) {
+					Log.e("Error: ", e.getMessage());
+				}
+
+				String xmlPath = "/sdcard/rom.xml";
+				BufferedReader xml = null;
+				StringBuilder total = null;
+				try {
+					File file = new File(xmlPath);
+					InputStream inputStream = new FileInputStream(file);
+					xml = new BufferedReader(new InputStreamReader(inputStream));
+					total = new StringBuilder();
+					String line;
+
+					while ((line = xml.readLine()) != null) {
+						total.append(line);
+					}
+				} catch (Exception e) {
+					Log.e("Error: ", e.getMessage());
+				}
+
+				// String xml = parser.getXmlFromUrl(URL);
+				Document doc = parser.getDomElement(total.toString()); // getting
+																		// DOM
+																		// element
+
+				Log.w("INFO: ", total.toString());
+
+				NodeList nl = doc.getElementsByTagName(KEY_ITEM);
+
 				for (int i = 0; i < nl.getLength(); i++) {
 					Element e = (Element) nl.item(i);
-					dataList.add(new DrawerItem(parser.getValue(e, "name"), R.drawable.ic_action_settings));
+					dataList.add(new DrawerItem(parser.getValue(e, "name"),
+							R.drawable.ic_action_settings));
 				}
-	        	
-	        	
+
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
 						Log.w("myApp", "TEST3");
-						CustomDrawerAdapter adapter = new CustomDrawerAdapter(context, R.layout.custom_drawer_item,
-								dataList);
-								mDrawerList.setAdapter(adapter);
-								mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-								Log.w("myApp", "KONIEC");
-	            		        
-								if (savedInstanceState == null) {
-									SelectItem(0);
-		}}});}}.start();
+						CustomDrawerAdapter adapter = new CustomDrawerAdapter(
+								context, R.layout.custom_drawer_item, dataList);
+						mDrawerList.setAdapter(adapter);
+						mDrawerList
+								.setOnItemClickListener(new DrawerItemClickListener());
+						Log.w("myApp", "KONIEC");
 
-		
-//		new FirstDrawerCreater(this).execute();
-		
+						if (savedInstanceState == null) {
+							SelectItem(0);
+						}
+					}
+				});
+			}
+		}.start();
+
+		// new FirstDrawerCreater(this).execute();
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
@@ -126,11 +200,8 @@ public class MainActivity extends Activity {
 
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-		
-
-
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -142,44 +213,43 @@ public class MainActivity extends Activity {
 
 		new Thread() {
 			public void run() {
-		
-		Fragment fragment = null;
-		
-		final Bundle args = new Bundle();
 
-		
-		if (possition==0) {
-			fragment = new Status();
-		}
-		else {
+				Fragment fragment = null;
 
-			fragment = new ROMList();
-			args.putString(ROMList.ROM_NAME, dataList.get(possition).getItemName());
+				final Bundle args = new Bundle();
 
-		}
-		
+				if (possition == 0) {
+					fragment = new Status();
+				} else {
 
-		
-		fragment.setArguments(args);
-		FragmentManager frgManager = getFragmentManager();
-		
-		
-		final FragmentManager frgManagerFinal = frgManager;
-		final Fragment fragmentfinal = fragment;
+					fragment = new ROMList();
+					args.putString(ROMList.ROM_NAME, dataList.get(possition)
+							.getItemName());
 
-				frgManagerFinal.beginTransaction().replace(R.id.content_frame, fragmentfinal)
-				.commit();
-				
+				}
+
+				fragment.setArguments(args);
+				FragmentManager frgManager = getFragmentManager();
+
+				final FragmentManager frgManagerFinal = frgManager;
+				final Fragment fragmentfinal = fragment;
+
+				frgManagerFinal.beginTransaction()
+						.replace(R.id.content_frame, fragmentfinal).commit();
+
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-				
-		mDrawerList.setItemChecked(possition, true);
-		setTitle(dataList.get(possition).getItemName());
-		mDrawerLayout.closeDrawer(mDrawerList);
 
-			}});}}.start();
-		
+						mDrawerList.setItemChecked(possition, true);
+						setTitle(dataList.get(possition).getItemName());
+						mDrawerLayout.closeDrawer(mDrawerList);
+
+					}
+				});
+			}
+		}.start();
+
 	}
 
 	@Override
@@ -218,14 +288,13 @@ public class MainActivity extends Activity {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			
-		//	Log.d("myApp",view.toString());
+
+			// Log.d("myApp",view.toString());
 			SelectItem(position);
 
 		}
 	}
 
-
-//Czytaj wiêcej na: http://javastart.pl/narzedzia/asynctask/#ixzz2zqbHTIQJ
+	// Czytaj wiêcej na: http://javastart.pl/narzedzia/asynctask/#ixzz2zqbHTIQJ
 
 }

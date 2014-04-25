@@ -60,7 +60,7 @@ public class ROMList extends Fragment {
 	    
 	    String URL="";
 	    
-	    if(rooomname.equals("CM")){URL = "http://192.168.1.2/cm.xml";}
+	    if(rooomname.equals("CM")){URL = "http://jereksel.cba.pl/android/cm.xml";}
 	    else if(rooomname.equals("PAC")){URL = "http://192.168.1.2/pac.xml";}
 	    else if(rooomname.equals("AOSP")){URL = "http://192.168.1.2/aosp.xml";}
 
