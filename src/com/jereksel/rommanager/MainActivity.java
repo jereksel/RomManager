@@ -101,11 +101,11 @@ public class MainActivity extends Activity {
 		pDialog = ProgressDialog.show(context, "Downloading/Preparing Data..",
 				"Please wait", true, false);
 
-		final DownloadXMLs[] array = new DownloadXMLs[(Data.xml).length];
+		final DownloadXML[] array = new DownloadXML[(Data.xml).length];
 
 		for (int i = 0; i <= (Data.xml).length - 1; i++) {
 			Log.w("TESCIK", String.valueOf(i));
-			array[i] = new DownloadXMLs(i, context, false);
+			array[i] = new DownloadXML(i, context, false);
 			(array[i]).start();
 		}
 
@@ -275,10 +275,10 @@ public class MainActivity extends Activity {
 						}
 					});
 
-					DownloadXMLs[] array = new DownloadXMLs[(Data.xml).length];
+					DownloadXML[] array = new DownloadXML[(Data.xml).length];
 
 					for (int i = 0; i <= (Data.xml).length - 1; i++) {
-						array[i] = new DownloadXMLs(i, context_local, true);
+						array[i] = new DownloadXML(i, context_local, true);
 						(array[i]).start();
 					}
 
@@ -335,13 +335,13 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	private class DownloadXMLs extends Thread {
+	private class DownloadXML extends Thread {
 
 		int i;
 		MainActivity context;
 		boolean deletefile;
 
-		public DownloadXMLs(int i, MainActivity context, boolean deletefile) {
+		public DownloadXML(int i, MainActivity context, boolean deletefile) {
 
 			this.i = i;
 			this.context = context;

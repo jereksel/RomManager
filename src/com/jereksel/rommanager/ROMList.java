@@ -116,7 +116,6 @@ public class ROMList extends Fragment {
 			e1.printStackTrace();
 		}
 
-		// String xml = parser.getXmlFromUrl(URL);
 		Document doc = parser.getDomElement(total.toString()); // getting
 																// DOM
 																// element
