@@ -34,37 +34,35 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.widget.ShareActionProvider;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
 	// XML node keys
 	static final String KEY_ITEM = "rom"; // parent node
-	private ShareActionProvider mShareActionProvider;
 
 	private DrawerLayout mDrawerLayout;
 	public static ListView mDrawerList;
@@ -73,14 +71,15 @@ public class MainActivity extends Activity {
 	private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
 	CustomDrawerAdapter adapter;
-
-	private ProgressDialog pDialog;
+	MainActivity context_local;
+	ProgressDialog Dialog;
 
 	List<DrawerItem> dataList;
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		final MainActivity context = this;
+		context_local = context;
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
@@ -97,6 +96,8 @@ public class MainActivity extends Activity {
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
 				GravityCompat.START);
 
+		final ProgressDialog pDialog;
+
 		pDialog = ProgressDialog.show(context, "Downloading/Preparing Data..",
 				"Please wait", true, false);
 
@@ -104,11 +105,9 @@ public class MainActivity extends Activity {
 
 		for (int i = 0; i <= (Data.xml).length - 1; i++) {
 			Log.w("TESCIK", String.valueOf(i));
-			array[i] = new DownloadXMLs(i, context);
+			array[i] = new DownloadXMLs(i, context, false);
 			(array[i]).start();
 		}
-
-		Log.w("myApp", "TEST1");
 
 		new Thread() {
 			public void run() {
@@ -117,9 +116,6 @@ public class MainActivity extends Activity {
 
 				dataList.add(new DrawerItem("Status",
 						R.drawable.ic_action_settings));
-
-				Log.w("myApp", "TEST2");
-
 
 				for (int i = 0; i <= (Data.xml).length - 1; i++) {
 					try {
@@ -150,9 +146,6 @@ public class MainActivity extends Activity {
 				Document doc = parser.getDomElement(total.toString()); // getting
 																		// DOM
 																		// element
-
-				Log.w("INFO: ", total.toString());
-
 				NodeList nl = doc.getElementsByTagName(KEY_ITEM);
 
 				for (int i = 0; i < nl.getLength(); i++) {
@@ -165,13 +158,11 @@ public class MainActivity extends Activity {
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						Log.w("myApp", "TEST3");
 						CustomDrawerAdapter adapter = new CustomDrawerAdapter(
 								context, R.layout.custom_drawer_item, dataList);
 						mDrawerList.setAdapter(adapter);
 						mDrawerList
 								.setOnItemClickListener(new DrawerItemClickListener());
-						Log.w("myApp", "KONIEC");
 
 						if (savedInstanceState == null) {
 							SelectItem(0);
@@ -213,7 +204,7 @@ public class MainActivity extends Activity {
 
 	public void SelectItem(final int possition) {
 
-		//Maybe this Thread is not necessary
+		// Maybe this Thread is not necessary
 		new Thread() {
 			public void run() {
 
@@ -224,21 +215,16 @@ public class MainActivity extends Activity {
 				if (possition == 0) {
 					fragment = new Status();
 				} else {
-
 					fragment = new ROMList();
 					args.putString(ROMList.ROM_NAME, dataList.get(possition)
 							.getItemName());
-
 				}
 
 				fragment.setArguments(args);
 				FragmentManager frgManager = getFragmentManager();
 
-				final FragmentManager frgManagerFinal = frgManager;
-				final Fragment fragmentfinal = fragment;
-
-				frgManagerFinal.beginTransaction()
-						.replace(R.id.content_frame, fragmentfinal).commit();
+				frgManager.beginTransaction()
+						.replace(R.id.content_frame, fragment).commit();
 
 			}
 		}.start();
@@ -273,14 +259,64 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// The action bar home/up action should open or close the drawer.
 		// ActionBarDrawerToggle will take care of this.
-		
+
 		switch (item.getItemId()) {
-			case R.id.delete_xml:
-			     Toast.makeText(getApplicationContext(), 
-                         "XML CLICK", Toast.LENGTH_LONG).show();
+		case R.id.delete_xml:
+
+			new Thread() {
+				public void run() {
+
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							Dialog = ProgressDialog.show(context_local,
+									"Downloading/Preparing Data..",
+									"Please wait", true, false);
+						}
+					});
+
+					DownloadXMLs[] array = new DownloadXMLs[(Data.xml).length];
+
+					for (int i = 0; i <= (Data.xml).length - 1; i++) {
+						array[i] = new DownloadXMLs(i, context_local, true);
+						(array[i]).start();
+					}
+
+					for (int i = 0; i <= (Data.xml).length - 1; i++) {
+						try {
+							array[i].join();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							Dialog.dismiss();
+							Intent mStartActivity = new Intent(context_local,
+									MainActivity.class);
+							int mPendingIntentId = 123456;
+							PendingIntent mPendingIntent = PendingIntent
+									.getActivity(context_local,
+											mPendingIntentId, mStartActivity,
+											PendingIntent.FLAG_CANCEL_CURRENT);
+							AlarmManager mgr = (AlarmManager) context_local
+									.getSystemService(Context.ALARM_SERVICE);
+							mgr.set(AlarmManager.RTC,
+									System.currentTimeMillis() + 100,
+									mPendingIntent);
+							System.exit(0);
+
+						}
+					});
+
+				}
+			}.start();
+
 		}
 
-		
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
@@ -303,12 +339,13 @@ public class MainActivity extends Activity {
 
 		int i;
 		MainActivity context;
+		boolean deletefile;
 
-		public DownloadXMLs(int i, MainActivity context) {
+		public DownloadXMLs(int i, MainActivity context, boolean deletefile) {
 
 			this.i = i;
 			this.context = context;
-
+			this.deletefile = deletefile;
 		}
 
 		public void run() {
@@ -316,13 +353,15 @@ public class MainActivity extends Activity {
 			int count;
 			try {
 				URL url = new URL(Data.downloadxml[i]);
-				File file2 = new File(context.getFilesDir(), Data.xml[i]);
-				if (!(file2.exists())) {
-					URLConnection conection = url.openConnection();
-					String location = file2.getAbsolutePath();
-					conection.connect();
+				File file = new File(context.getFilesDir(), Data.xml[i]);
+				if (deletefile)
+					file.delete();
+				if (!(file.exists())) {
+					URLConnection connection = url.openConnection();
+					String location = file.getAbsolutePath();
+					connection.connect();
 					InputStream input = new BufferedInputStream(
-							url.openStream(), 8192);
+							url.openStream());
 					OutputStream output = new FileOutputStream(location);
 
 					byte data[] = new byte[1024];
@@ -340,6 +379,7 @@ public class MainActivity extends Activity {
 					// closing streams
 					output.close();
 					input.close();
+					Log.w("Pobrano: ", String.valueOf(i));
 
 				}
 			} catch (Exception e) {
