@@ -386,7 +386,7 @@ public class MainActivity extends Activity {
 				Log.e("Error: ", e.getMessage());
 			}
 
-			Log.w("Zakoñczono: ", String.valueOf(i));
+			Log.w("Zakonczono: ", String.valueOf(i));
 		}
 	}
 
