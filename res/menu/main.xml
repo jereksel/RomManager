@@ -4,6 +4,6 @@
         android:id="@+id/delete_xml"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="XML"/>
+		android:title="@+string/xml_update" />
 
 </menu>

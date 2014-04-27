@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/rom_name"
         android:layout_centerHorizontal="true"
-        android:text="By" />
+        android:text="@+string/rom_detailed_by" />
 
     <TextView
         android:id="@+id/rom_author"
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/rom_author"
         android:layout_toLeftOf="@+id/textView2"
-        android:text="Download whole rom" 
+        android:text="@+string/download_whole_rom_button" 
         android:linksClickable="true" 
         android:onClick="DownloadWhole" />
 
@@ -45,6 +45,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/whole"
         android:layout_toRightOf="@+id/textView2"
-        android:text="Download incremental update" />
+        android:text="@+string/download_incremental_update_button" />
 
 </RelativeLayout>

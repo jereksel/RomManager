@@ -8,5 +8,9 @@
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">Close drawer</string>
     <string name="android_version"><b>Android Version:</b></string>
+    <string name="xml_update">Update/Reload xml files</string>
+    <string name="rom_detailed_by">By</string>
+    <string name="download_whole_rom_button">Download whole rom</string>
+    <string name="download_incremental_update_button">Download incremental update</string>
 
 </resources>
