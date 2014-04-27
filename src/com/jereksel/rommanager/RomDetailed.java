@@ -41,7 +41,6 @@ public class RomDetailed extends Activity {
 		version = in.getStringExtra("VERSION");
 		author = in.getStringExtra("AUTHOR");
 		download = in.getStringExtra("DOWNLOAD");
-		in.getStringExtra("XDA");
 
 		// Displaying all values on the screen
 		TextView name = (TextView) findViewById(R.id.rom_name);

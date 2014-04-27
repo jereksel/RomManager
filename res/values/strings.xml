@@ -4,13 +4,13 @@
     <string name="app_name">RomManager</string>
     <string name="action_settings">Update</string>
     <string name="hello_world">Hello world!</string>
-    
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">Close drawer</string>
-    <string name="android_version"><b>Android Version:</b></string>
+    <string name="android_version">Android Version:</string>
     <string name="xml_update">Update/Reload xml files</string>
     <string name="rom_detailed_by">By</string>
     <string name="download_whole_rom_button">Download whole rom</string>
     <string name="download_incremental_update_button">Download incremental update</string>
-
+    <string name="lcd_type">LCD type:</string>
+    
 </resources>

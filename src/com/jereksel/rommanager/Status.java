@@ -16,7 +16,12 @@
 
 package com.jereksel.rommanager;
 
+import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import android.app.Fragment;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,7 +31,8 @@ import android.widget.TextView;
 
 public class Status extends Fragment {
 
-	TextView tvItemName;
+	TextView androidversion;
+	TextView lcdtype;
 
 	public Status() {
 
@@ -35,11 +41,31 @@ public class Status extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
+		
 		View view = inflater.inflate(R.layout.status_layout, container, false);
+		
+		((TextView) view.findViewById(R.id.android_version)).setTypeface(null, Typeface.BOLD);
+		((TextView) view.findViewById(R.id.lcd_type)).setTypeface(null, Typeface.BOLD);
 
-		tvItemName = (TextView) view.findViewById(R.id.android_version_text);
-		tvItemName.setText(Build.VERSION.RELEASE);
+		
+		androidversion = (TextView) view
+				.findViewById(R.id.android_version_text);
+		androidversion.setText(Build.VERSION.RELEASE);
+
+		File dir = new File("/sys/devices/");
+		if (dir.exists() && dir.isDirectory()) {
+			Pattern p = Pattern.compile("pri_lcd_.*");
+			File[] SysList = dir.listFiles();
+			for (int i = 0; i < SysList.length; i++) {
+				Matcher matcher = p.matcher(SysList[i].getName());
+				if (matcher.find()) {
+					lcdtype = (TextView) view.findViewById(R.id.lcd_type_text);
+					lcdtype.setText(matcher.group(0).replace("pri_lcd_", ""));
+					break;
+				}
+			}
+
+		}
 
 		return view;
 	}
