@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014 Ahamed Ishak
+ * Copyright (C) 2014 Andrzej Ressel (jereksel@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +25,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class CustomDrawerAdapter extends ArrayAdapter<DrawerItem> {
@@ -56,7 +56,6 @@ public class CustomDrawerAdapter extends ArrayAdapter<DrawerItem> {
 			view = inflater.inflate(layoutResID, parent, false);
 			drawerHolder.ItemName = (TextView) view
 					.findViewById(R.id.drawer_itemName);
-			drawerHolder.icon = (ImageView) view.findViewById(R.id.drawer_icon);
 
 			view.setTag(drawerHolder);
 
@@ -66,9 +65,6 @@ public class CustomDrawerAdapter extends ArrayAdapter<DrawerItem> {
 		}
 
 		DrawerItem dItem = (DrawerItem) this.drawerItemList.get(position);
-
-		drawerHolder.icon.setImageDrawable(view.getResources().getDrawable(
-				dItem.getImgResID()));
 		drawerHolder.ItemName.setText(dItem.getItemName());
 
 		return view;
@@ -76,6 +72,5 @@ public class CustomDrawerAdapter extends ArrayAdapter<DrawerItem> {
 
 	private static class DrawerItemHolder {
 		TextView ItemName;
-		ImageView icon;
 	}
 }

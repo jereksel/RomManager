@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014 Ahamed Ishak
+ * Copyright (C) 2014 Andrzej Ressel (jereksel@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +20,10 @@ package com.jereksel.rommanager;
 public class DrawerItem {
 
 	String ItemName;
-	int imgResID;
 	
-	public DrawerItem(String itemName, int imgResID) {
+	public DrawerItem(String itemName) {
 		super();
 		ItemName = itemName;
-		this.imgResID = imgResID;
 	}
 	
 	public String getItemName() {
@@ -33,13 +32,6 @@ public class DrawerItem {
 	public void setItemName(String itemName) {
 		ItemName = itemName;
 	}
-	public int getImgResID() {
-		return imgResID;
-	}
-	public void setImgResID(int imgResID) {
-		this.imgResID = imgResID;
-	}
-	
 	
 	
 }

@@ -22,13 +22,6 @@
                   android:minHeight="55dp"
                  >
  
-                  <ImageView
-                      android:id="@+id/drawer_icon"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:visibility="gone"
-                      />
- 
                   <TextView
                       android:id="@+id/drawer_itemName"
                       android:layout_width="wrap_content"

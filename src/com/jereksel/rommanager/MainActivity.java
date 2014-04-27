@@ -114,8 +114,7 @@ public class MainActivity extends Activity {
 
 				dataList = new ArrayList<DrawerItem>();
 
-				dataList.add(new DrawerItem("Status",
-						R.drawable.ic_action_settings));
+				dataList.add(new DrawerItem("Status"));
 
 				for (int i = 0; i <= (Data.xml).length - 1; i++) {
 					try {
@@ -150,8 +149,7 @@ public class MainActivity extends Activity {
 
 				for (int i = 0; i < nl.getLength(); i++) {
 					Element e = (Element) nl.item(i);
-					dataList.add(new DrawerItem(parser.getValue(e, "name"),
-							R.drawable.ic_action_settings));
+					dataList.add(new DrawerItem(parser.getValue(e, "name")));
 				}
 				pDialog.dismiss();
 
