@@ -12,5 +12,5 @@
     <string name="download_whole_rom_button">Download whole rom</string>
     <string name="download_incremental_update_button">Download incremental update</string>
     <string name="lcd_type">LCD type:</string>
-    
+
 </resources>
