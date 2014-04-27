@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jereksel.rommanager" android:versionCode="1" android:versionName="0.01">
 
-    <activity android:name=".RomDetailed" android:theme="@android:style/Theme.Holo" />
-    <activity android:name=".FirstDrawerCreater" android:theme="@android:style/Theme.Holo" />
-
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="19" />
 
     <application android:allowBackup="true" android:icon="@drawable/ic_launcher"
@@ -17,7 +14,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".RomDetailed" android:theme="@android:style/Theme.Holo" />
-        <activity android:name=".FirstDrawerCreater" android:theme="@android:style/Theme.Holo" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
