@@ -18,8 +18,8 @@ package com.jereksel.rommanager;
 
 public class Data {
 
-    static String[] xml = {"rom.xml", "cm.xml"};
-    static String[] downloadxml = {
+    static final String[] xml = {"rom.xml", "cm.xml"};
+    static final String[] downloadxml = {
             "https://raw.githubusercontent.com/jereksel/RomManager-addictions/master/rom.xml",
             "https://raw.githubusercontent.com/jereksel/RomManager-addictions/master/cm.xml"};
 }

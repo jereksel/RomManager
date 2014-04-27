@@ -26,8 +26,6 @@ import android.widget.TextView;
 public class RomDetailed extends Activity {
 
     private String download;
-    private String version;
-    private String author;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,8 +36,8 @@ public class RomDetailed extends Activity {
         Intent in = getIntent();
 
         // Get XML values from previous intent
-        version = in.getStringExtra("VERSION");
-        author = in.getStringExtra("AUTHOR");
+        String version = in.getStringExtra("VERSION");
+        String author = in.getStringExtra("AUTHOR");
         download = in.getStringExtra("DOWNLOAD");
 
         // Displaying all values on the screen

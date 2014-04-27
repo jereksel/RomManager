@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="60px">
+    android:layout_width="match_parent"
+    android:layout_height="60px">
 
-    <TextView android:id="@+id/download" android:layout_width="0dp" android:layout_height="0dp"
+    <TextView
+        android:id="@+id/download"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:visibility="gone"></TextView>
 
-    <TextView android:id="@+id/label" android:layout_width="fill_parent"
-        android:layout_height="fill_parent" android:text="@+id/label"
+    <TextView
+        android:id="@+id/label"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:text="@+id/label"
         android:textSize="50px"></TextView>
 
 </LinearLayout>

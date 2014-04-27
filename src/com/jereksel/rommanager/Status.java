@@ -31,8 +31,8 @@ import java.util.regex.Pattern;
 
 public class Status extends Fragment {
 
-    TextView androidversion;
-    TextView lcdtype;
+    private TextView androidversion;
+    private TextView lcdtype;
 
     public Status() {
 
@@ -56,8 +56,8 @@ public class Status extends Fragment {
         if (dir.exists() && dir.isDirectory()) {
             Pattern p = Pattern.compile("pri_lcd_.*");
             File[] SysList = dir.listFiles();
-            for (int i = 0; i < SysList.length; i++) {
-                Matcher matcher = p.matcher(SysList[i].getName());
+            for (File aSysList : SysList) {
+                Matcher matcher = p.matcher(aSysList.getName());
                 if (matcher.find()) {
                     lcdtype = (TextView) view.findViewById(R.id.lcd_type_text);
                     lcdtype.setText(matcher.group(0).replace("pri_lcd_", ""));

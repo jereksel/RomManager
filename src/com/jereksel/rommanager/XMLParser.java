@@ -80,7 +80,7 @@ public class XMLParser {
      * @param XML string
      */
     public Document getDomElement(String xml) {
-        Document doc = null;
+        Document doc;
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         try {
 

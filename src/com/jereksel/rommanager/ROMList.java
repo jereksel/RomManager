@@ -25,7 +25,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -48,17 +47,10 @@ public class ROMList extends Fragment {
 
     // XML node keys
     public static final String ROM_NAME = "romname";
-    public static final String IMAGE_RESOURCE_ID = "iconResourceID";
-    public static final String ITEM_NAME = "itemName";
-    static final String KEY_PARENT = "rom";
-    static final String KEY_ID = "id";
-    static final String KEY_NAME = "name";
-    static final String KEY_DOWNLOAD = "download";
-    static final String KEY_OTHER_DATA = "other-info";
-    static final String KEY_INFO = "info";
-    public static String KEY_ITEM = "CM";
-    ImageView ivIcon;
-    TextView tvItemName;
+    private static final String KEY_PARENT = "rom";
+    private static final String KEY_NAME = "name";
+    private static final String KEY_DOWNLOAD = "download";
+    private static final String KEY_OTHER_DATA = "other-info";
     private boolean valid = true;
     private String xdathread = "";
     private String author = "";

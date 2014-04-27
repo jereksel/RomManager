@@ -2,8 +2,6 @@
 <resources>
 
     <string name="app_name">RomManager</string>
-    <string name="action_settings">Update</string>
-    <string name="hello_world">Hello world!</string>
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">Close drawer</string>
     <string name="android_version">Android Version:</string>

@@ -1,28 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:columnCount="1">
 
-    <TextView android:id="@+id/rom_name" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" android:text="ROM NAME" />
+    <TextView
+        android:id="@+id/rom_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="ROM NAME" />
 
-    <TextView android:id="@+id/textView2" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:layout_below="@+id/rom_name"
-        android:layout_centerHorizontal="true" android:text="@+string/rom_detailed_by" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rom_name"
+        android:layout_centerHorizontal="true"
+        android:text="@string/rom_detailed_by" />
 
-    <TextView android:id="@+id/rom_author" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true" android:text="AUTHOR NAME" />
+    <TextView
+        android:id="@+id/rom_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:text="AUTHOR NAME" />
 
-    <Button android:id="@+id/whole" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:layout_below="@+id/rom_author"
-        android:layout_toLeftOf="@+id/textView2" android:linksClickable="true"
-        android:onClick="DownloadWhole" android:text="@+string/download_whole_rom_button" />
+    <Button
+        android:id="@+id/whole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rom_author"
+        android:layout_toLeftOf="@+id/textView2"
+        android:linksClickable="true"
+        android:onClick="DownloadWhole"
+        android:text="@string/download_whole_rom_button" />
 
-    <Button android:id="@+id/incremental" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/whole" android:layout_toRightOf="@+id/textView2"
-        android:text="@+string/download_incremental_update_button" />
+    <Button
+        android:id="@+id/incremental"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/whole"
+        android:layout_toRightOf="@+id/textView2"
+        android:text="@string/download_incremental_update_button" />
 
 </RelativeLayout>

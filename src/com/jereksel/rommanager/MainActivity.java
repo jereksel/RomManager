@@ -62,12 +62,11 @@ import java.util.List;
 public class MainActivity extends Activity {
 
     // XML node keys
-    static final String KEY_ITEM = "rom"; // parent node
-    public static ListView mDrawerList;
-    CustomDrawerAdapter adapter;
-    MainActivity context_local;
-    ProgressDialog Dialog;
-    List<DrawerItem> dataList;
+    private static final String KEY_ITEM = "rom"; // parent node
+    private static ListView mDrawerList;
+    private MainActivity context_local;
+    private ProgressDialog Dialog;
+    private List<DrawerItem> dataList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mDrawerTitle;
@@ -122,7 +121,7 @@ public class MainActivity extends Activity {
                     }
                 }
 
-                BufferedReader xml = null;
+                BufferedReader xml;
                 StringBuilder total = null;
                 try {
                     File file = new File(context.getFilesDir(), Data.xml[0]);
@@ -203,7 +202,7 @@ public class MainActivity extends Activity {
         new Thread() {
             public void run() {
 
-                Fragment fragment = null;
+                Fragment fragment;
 
                 final Bundle args = new Bundle();
 
@@ -312,14 +311,11 @@ public class MainActivity extends Activity {
 
         }
 
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
+        return mDrawerToggle.onOptionsItemSelected(item);
 
-        return false;
     }
 
-    public class DrawerItemClickListener implements
+    private class DrawerItemClickListener implements
             ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -332,9 +328,9 @@ public class MainActivity extends Activity {
 
     private class DownloadXML extends Thread {
 
-        int i;
-        MainActivity context;
-        boolean deletefile;
+        final int i;
+        final MainActivity context;
+        final boolean deletefile;
 
         public DownloadXML(int i, MainActivity context, boolean deletefile) {
 

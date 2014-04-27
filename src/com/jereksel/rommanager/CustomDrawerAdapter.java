@@ -29,11 +29,9 @@ import java.util.List;
 
 public class CustomDrawerAdapter extends ArrayAdapter<DrawerItem> {
 
-    //TEST COMMIT
-
-    Context context;
-    List<DrawerItem> drawerItemList;
-    int layoutResID;
+    private final Context context;
+    private final List<DrawerItem> drawerItemList;
+    private final int layoutResID;
 
     public CustomDrawerAdapter(Context context, int layoutResourceID,
                                List<DrawerItem> listItems) {
@@ -66,7 +64,7 @@ public class CustomDrawerAdapter extends ArrayAdapter<DrawerItem> {
 
         }
 
-        DrawerItem dItem = (DrawerItem) this.drawerItemList.get(position);
+        DrawerItem dItem = this.drawerItemList.get(position);
         drawerHolder.ItemName.setText(dItem.getItemName());
 
         return view;
