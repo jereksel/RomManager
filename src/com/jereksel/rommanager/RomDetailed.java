@@ -50,7 +50,11 @@ public class RomDetailed extends Activity {
     }
 
     public void DownloadWhole(View view) {
-        goToUrl(download);
+        new Thread() {
+            public void run() {
+                goToUrl(download);
+            }
+        }.start();
     }
 
     private void goToUrl(String url) {

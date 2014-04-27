@@ -31,9 +31,6 @@ import java.util.regex.Pattern;
 
 public class Status extends Fragment {
 
-    private TextView androidversion;
-    private TextView lcdtype;
-
     public Status() {
 
     }
@@ -48,7 +45,7 @@ public class Status extends Fragment {
         ((TextView) view.findViewById(R.id.lcd_type)).setTypeface(null, Typeface.BOLD);
 
 
-        androidversion = (TextView) view
+        TextView androidversion = (TextView) view
                 .findViewById(R.id.android_version_text);
         androidversion.setText(Build.VERSION.RELEASE);
 
@@ -59,7 +56,7 @@ public class Status extends Fragment {
             for (File aSysList : SysList) {
                 Matcher matcher = p.matcher(aSysList.getName());
                 if (matcher.find()) {
-                    lcdtype = (TextView) view.findViewById(R.id.lcd_type_text);
+                    TextView lcdtype = (TextView) view.findViewById(R.id.lcd_type_text);
                     lcdtype.setText(matcher.group(0).replace("pri_lcd_", ""));
                     break;
                 }
