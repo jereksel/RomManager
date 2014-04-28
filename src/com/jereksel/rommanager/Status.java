@@ -51,13 +51,13 @@ public class Status extends Fragment {
 
         File dir = new File("/sys/devices/");
         if (dir.exists() && dir.isDirectory()) {
-            Pattern p = Pattern.compile("pri_lcd_.*");
+            Pattern p = Pattern.compile("pri_lcd_(.*)");
             File[] SysList = dir.listFiles();
             for (File aSysList : SysList) {
                 Matcher matcher = p.matcher(aSysList.getName());
                 if (matcher.find()) {
                     TextView lcdtype = (TextView) view.findViewById(R.id.lcd_type_text);
-                    lcdtype.setText(matcher.group(0).replace("pri_lcd_", ""));
+                    lcdtype.setText(matcher.group(1));
                     break;
                 }
             }
