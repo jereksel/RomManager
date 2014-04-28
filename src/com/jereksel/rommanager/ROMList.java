@@ -143,7 +143,7 @@ public class ROMList extends Fragment {
         ListView lv = (ListView) view.findViewById(R.id.listview);
 
         lv.setAdapter(new SimpleAdapter(container.getContext(), menuItems,
-                R.layout.list_item, new String[]{KEY_NAME, KEY_DOWNLOAD},
+                R.layout.romlist_item, new String[]{KEY_NAME, KEY_DOWNLOAD},
                 new int[]{R.id.label, R.id.download}));
 
         lv.setOnItemClickListener(new OnItemClickListener() {
