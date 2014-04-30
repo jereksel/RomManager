@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
     // XML node keys
     private static final String KEY_ITEM = "rom"; // parent node
     private static ListView mDrawerList;
-    private MainActivity context_local;
+    private MainActivity context;
     private ProgressDialog Dialog;
     private List<DrawerItem> dataList;
     private DrawerLayout mDrawerLayout;
@@ -75,7 +75,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         final MainActivity context = this;
-        context_local = context;
+        this.context = context;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -263,7 +263,7 @@ public class MainActivity extends Activity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Dialog = ProgressDialog.show(context_local,
+                                Dialog = ProgressDialog.show(context,
                                         "Downloading/Preparing Data..",
                                         "Please wait", true, false);
                             }
@@ -272,7 +272,7 @@ public class MainActivity extends Activity {
                         DownloadXML[] array = new DownloadXML[(Data.xml).length];
 
                         for (int i = 0; i <= (Data.xml).length - 1; i++) {
-                            array[i] = new DownloadXML(i, context_local, true);
+                            array[i] = new DownloadXML(i, context, true);
                             (array[i]).start();
                         }
 
@@ -289,14 +289,14 @@ public class MainActivity extends Activity {
                             @Override
                             public void run() {
                                 Dialog.dismiss();
-                                Intent mStartActivity = new Intent(context_local,
+                                Intent mStartActivity = new Intent(context,
                                         MainActivity.class);
                                 int mPendingIntentId = 123456;
                                 PendingIntent mPendingIntent = PendingIntent
-                                        .getActivity(context_local,
+                                        .getActivity(context,
                                                 mPendingIntentId, mStartActivity,
                                                 PendingIntent.FLAG_CANCEL_CURRENT);
-                                AlarmManager mgr = (AlarmManager) context_local
+                                AlarmManager mgr = (AlarmManager) context
                                         .getSystemService(Context.ALARM_SERVICE);
                                 mgr.set(AlarmManager.RTC,
                                         System.currentTimeMillis() + 100,
@@ -308,7 +308,12 @@ public class MainActivity extends Activity {
 
                     }
                 }.start();
+                break;
 
+            case R.id.about_screen:
+                Intent in = new Intent(context,
+                        AboutScreen.class);
+                startActivity(in);
         }
 
         return mDrawerToggle.onOptionsItemSelected(item);

@@ -52,8 +52,8 @@ public class ROMList extends Fragment {
     private static final String KEY_DOWNLOAD = "download";
     private static final String KEY_OTHER_DATA = "other-info";
     private boolean valid = true;
-    private String xdathread = "";
-    private String author = "";
+    private String xdathread;
+    private String author;
 
     public ROMList() {
 
@@ -104,9 +104,7 @@ public class ROMList extends Fragment {
             e1.printStackTrace();
         }
 
-        Document doc = parser.getDomElement(total.toString()); // getting
-        // DOM
-        // element
+        Document doc = parser.getDomElement(total.toString());
 
         NodeList nl = doc.getElementsByTagName(KEY_PARENT);
 
@@ -139,7 +137,7 @@ public class ROMList extends Fragment {
         }
 
         View view = inflater.inflate(R.layout.romlist_layout, container, false);
-
+        if (!(valid)) return view;
         ListView lv = (ListView) view.findViewById(R.id.listview);
 
         lv.setAdapter(new SimpleAdapter(container.getContext(), menuItems,

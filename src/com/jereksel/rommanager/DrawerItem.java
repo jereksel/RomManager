@@ -19,7 +19,7 @@ package com.jereksel.rommanager;
 
 public class DrawerItem {
 
-    String ItemName;
+    private String ItemName;
 
     public DrawerItem(String itemName) {
         super();
