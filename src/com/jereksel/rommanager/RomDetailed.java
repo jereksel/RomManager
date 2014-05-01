@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class RomDetailed extends Activity {
 
@@ -54,6 +55,10 @@ public class RomDetailed extends Activity {
 
     }
 
+    public void DownloadIncremental(View view) {
+        Toast.makeText(getApplicationContext(), "Not ready yet.", Toast.LENGTH_LONG).show();
+    }
+
     public void GoToXDA(View view) {
         new Thread() {
             public void run() {
@@ -61,6 +66,7 @@ public class RomDetailed extends Activity {
             }
         }.start();
     }
+
     public void DownloadWhole(View view) {
         new Thread() {
             public void run() {
@@ -76,7 +82,6 @@ public class RomDetailed extends Activity {
     }
 
     public void ShowChangelog(View view) {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(changelog);
         builder.setCancelable(true);

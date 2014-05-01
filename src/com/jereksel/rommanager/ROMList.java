@@ -113,8 +113,6 @@ public class ROMList extends Fragment {
             map.put(KEY_DOWNLOAD, parser.getValue(e, KEY_DOWNLOAD));
             map.put(KEY_CHANGELOG, parser.getValue(e, KEY_CHANGELOG));
 
-            Log.w("CHANGELOG:", parser.getValue(e, KEY_CHANGELOG));
-
             // adding HashList to ArrayList
             menuItems.add(map);
         }
@@ -157,7 +155,6 @@ public class ROMList extends Fragment {
                 in.putExtra("DOWNLOAD", download);
                 in.putExtra("XDA", xdathread);
                 in.putExtra("CHANGELOG", changelog);
-                Log.w("CHANGELOG:", changelog);
                 startActivity(in);
 
             }
