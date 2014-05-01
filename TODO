@@ -1,9 +1,5 @@
-Make it usable
-Make in more eyecandy (it looks like **** now)
-Add more roms
+Changelog in xml file
 Pack .xml files (.tar propably - https://code.google.com/p/jtar/)
-Write incremental updates script
-Move .xml to github
-Create .xml update method
-
-http://www.vogella.com/tutorials/AndroidListView/article.html#expandablelistview
+Make it usable
+Make it more eyecandy (it looks like **** now)
+Add more roms

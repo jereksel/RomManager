@@ -23,6 +23,8 @@ package com.jereksel.rommanager;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.PendingIntent;
@@ -31,7 +33,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -71,6 +72,7 @@ public class MainActivity extends Activity {
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
+    private String rom="Status";
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -78,10 +80,6 @@ public class MainActivity extends Activity {
         this.context = context;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                .permitAll().build();
-        StrictMode.setThreadPolicy(policy);
 
         // Initializing
         dataList = new ArrayList<DrawerItem>();
@@ -197,6 +195,9 @@ public class MainActivity extends Activity {
     }
 
     public void SelectItem(final int possition) {
+
+        rom = dataList.get(possition)
+                .getItemName();
 
         // Maybe this Thread is not necessary
         new Thread() {
@@ -314,6 +315,20 @@ public class MainActivity extends Activity {
                 Intent in = new Intent(context,
                         AboutScreen.class);
                 startActivity(in);
+                break;
+
+            case R.id.changelog_dialog:
+
+                if (rom.equals("CM")){
+                    Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage(getString(R.string.CMChangelog));
+                    builder.setCancelable(true);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+
+
+                break;
         }
 
         return mDrawerToggle.onOptionsItemSelected(item);
