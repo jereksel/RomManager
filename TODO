@@ -1,4 +1,5 @@
 Changelog in xml file
+Fix FC on startup (when no internet connection)
 Pack .xml files (.tar propably - https://code.google.com/p/jtar/)
 Make it usable
 Make it more eyecandy (it looks like **** now)
