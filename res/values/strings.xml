@@ -17,10 +17,10 @@
     <string name="developers_header">Developers</string>
     <string name="developers">jereksel</string>
     <string name="thanks_header">Thanks</string>
-    <string name="thanks">Ravi Tamada for XML parser \nAhamed Ishak for Navigation Drawer\nkamranzafar for jtar library</string>
+    <string name="thanks">Ravi Tamada for XML parser \nAhamed Ishak for Navigation Drawer</string>
+    <string name="xda_thread">XDA thread</string>
+    <string name="appchangelog">App changelog</string>
     <string name="changelog">Changelog</string>
-    <string name="CMChangelog"><b>25/04</b>\n-CM sources update\n-Fix wrong voltage showing\nNovaThor Settings v1.3
-    \n<b>22/04 :</b>\n-CM sources update\n-Cleaned kernel\n-Fixed Mali autoboost problems\n-NovaThor Settings v1.2\n-Google location service fixed (maybe)
-    </string>
+    <string name="AppChangelog">0.1: Initial Release</string>
 
 </resources>

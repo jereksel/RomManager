@@ -37,7 +37,6 @@ import org.w3c.dom.NodeList;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -50,6 +49,7 @@ public class ROMList extends Fragment {
     private static final String KEY_PARENT = "rom";
     private static final String KEY_NAME = "name";
     private static final String KEY_DOWNLOAD = "download";
+    private static final String KEY_CHANGELOG = "changelog";
     private static final String KEY_OTHER_DATA = "other-info";
     private boolean valid = true;
     private String xdathread;
@@ -63,28 +63,20 @@ public class ROMList extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              final ViewGroup container, Bundle savedInstanceState) {
 
-        String rooomname = getArguments().getString(ROM_NAME);
-        Log.w("myApp", rooomname);
         ArrayList<HashMap<String, String>> menuItems = new ArrayList<HashMap<String, String>>();
+        String xmlfile;
 
-        int id = 0;
+        xmlfile = getArguments().getString(ROM_NAME).toLowerCase() + ".xml";
 
-        if (rooomname.equals("CM")) {
-            id = 1;
-        } else if (rooomname.equals("PAC")) {
-            id = 2;
-        } else if (rooomname.equals("AOSP")) {
-            id = 3;
-        }
+        Log.w("NAZWA:", xmlfile);
 
         XMLParser parser = new XMLParser();
-        // String xml = parser.getXmlFromUrl(URL); // getting XML
 
-        BufferedReader xml = null;
+        BufferedReader xml;
         StringBuilder total = null;
         try {
             File file = new File(container.getContext().getFilesDir(),
-                    Data.xml[id]);
+                    xmlfile);
             InputStream inputStream = new FileInputStream(file);
             xml = new BufferedReader(new InputStreamReader(inputStream));
             total = new StringBuilder();
@@ -94,14 +86,9 @@ public class ROMList extends Fragment {
                 total.append(line);
             }
         } catch (Exception e) {
-            Log.e("Error: ", e.getMessage());
-        }
-
-        try {
-            xml.close();
-        } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+            Toast.makeText(container.getContext(), "ERROR" + e.getMessage(),
+                    Toast.LENGTH_LONG).show();
+            Log.w("ERROR:", e.getMessage());
         }
 
         Document doc = parser.getDomElement(total.toString());
@@ -124,6 +111,9 @@ public class ROMList extends Fragment {
             // adding each child node to HashMap key => value
             map.put(KEY_NAME, parser.getValue(e, KEY_NAME));
             map.put(KEY_DOWNLOAD, parser.getValue(e, KEY_DOWNLOAD));
+            map.put(KEY_CHANGELOG, parser.getValue(e, KEY_CHANGELOG));
+
+            Log.w("CHANGELOG:", parser.getValue(e, KEY_CHANGELOG));
 
             // adding HashList to ArrayList
             menuItems.add(map);
@@ -141,8 +131,8 @@ public class ROMList extends Fragment {
         ListView lv = (ListView) view.findViewById(R.id.listview);
 
         lv.setAdapter(new SimpleAdapter(container.getContext(), menuItems,
-                R.layout.romlist_item, new String[]{KEY_NAME, KEY_DOWNLOAD},
-                new int[]{R.id.label, R.id.download}));
+                R.layout.romlist_item, new String[]{KEY_NAME, KEY_DOWNLOAD, KEY_CHANGELOG},
+                new int[]{R.id.label, R.id.download, R.id.changelog}));
 
         lv.setOnItemClickListener(new OnItemClickListener() {
 
@@ -156,6 +146,9 @@ public class ROMList extends Fragment {
                 String download = ((TextView) view.findViewById(R.id.download))
                         .getText().toString();
 
+                String changelog = ((TextView) view.findViewById(R.id.changelog))
+                        .getText().toString();
+
                 // Starting new intent
                 Intent in = new Intent(container.getContext(),
                         RomDetailed.class);
@@ -163,6 +156,8 @@ public class ROMList extends Fragment {
                 in.putExtra("AUTHOR", author);
                 in.putExtra("DOWNLOAD", download);
                 in.putExtra("XDA", xdathread);
+                in.putExtra("CHANGELOG", changelog);
+                Log.w("CHANGELOG:", changelog);
                 startActivity(in);
 
             }
