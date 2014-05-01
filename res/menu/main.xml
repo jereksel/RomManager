@@ -7,14 +7,15 @@
         android:title="@string/xml_update" />
 
     <item
+        android:id="@+id/changelog_dialog"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/appchangelog" />
+
+    <item
         android:id="@+id/about_screen"
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/about" />
-    <item
-        android:id="@+id/changelog_dialog"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/changelog" />
 
 </menu>

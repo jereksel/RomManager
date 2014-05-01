@@ -17,6 +17,7 @@
 package com.jereksel.rommanager;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +27,8 @@ import android.widget.TextView;
 public class RomDetailed extends Activity {
 
     private String download;
+    private String changelog;
+    private String xda;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,8 +39,10 @@ public class RomDetailed extends Activity {
         Intent in = getIntent();
 
         // Get XML values from previous intent
+        xda = in.getStringExtra("XDA");
         String version = in.getStringExtra("VERSION");
         String author = in.getStringExtra("AUTHOR");
+        changelog = in.getStringExtra("CHANGELOG");
         download = in.getStringExtra("DOWNLOAD");
 
         // Displaying all values on the screen
@@ -49,6 +54,13 @@ public class RomDetailed extends Activity {
 
     }
 
+    public void GoToXDA(View view) {
+        new Thread() {
+            public void run() {
+                goToUrl(xda);
+            }
+        }.start();
+    }
     public void DownloadWhole(View view) {
         new Thread() {
             public void run() {
@@ -61,6 +73,15 @@ public class RomDetailed extends Activity {
         Uri uriUrl = Uri.parse(url);
         Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
         startActivity(launchBrowser);
+    }
+
+    public void ShowChangelog(View view) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(changelog);
+        builder.setCancelable(true);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 }

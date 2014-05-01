@@ -30,19 +30,40 @@
         android:id="@+id/whole"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rom_author"
-        android:layout_toLeftOf="@+id/textView2"
         android:linksClickable="true"
         android:onClick="DownloadWhole"
-        android:text="@string/download_whole_rom_button" />
+        android:text="@string/download_whole_rom_button"
+        android:layout_above="@+id/incremental"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:id="@+id/incremental"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/whole"
-        android:layout_toRightOf="@+id/textView2"
-        android:text="@string/download_incremental_update_button" />
+        android:text="@string/download_incremental_update_button"
+        android:layout_above="@+id/button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/changelog"
+        android:onClick="ShowChangelog"
+        android:id="@+id/button"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/xda_thread"
+        android:onClick="GoToXDA"
+        android:id="@+id/button2"
+        android:layout_above="@+id/whole"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

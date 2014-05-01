@@ -2,9 +2,8 @@ package com.jereksel.rommanager;
 
 import android.app.Activity;
 import android.os.Bundle;
-
-import android.view.WindowManager;
 import android.view.Window;
+import android.view.WindowManager;
 
 public class AboutScreen extends Activity {
 

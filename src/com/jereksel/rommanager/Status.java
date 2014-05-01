@@ -44,7 +44,6 @@ public class Status extends Fragment {
         ((TextView) view.findViewById(R.id.android_version)).setTypeface(null, Typeface.BOLD);
         ((TextView) view.findViewById(R.id.lcd_type)).setTypeface(null, Typeface.BOLD);
 
-
         TextView androidversion = (TextView) view
                 .findViewById(R.id.android_version_text);
         androidversion.setText(Build.VERSION.RELEASE);

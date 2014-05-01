@@ -42,6 +42,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -49,9 +50,11 @@ import org.w3c.dom.NodeList;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -72,7 +75,8 @@ public class MainActivity extends Activity {
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-    private String rom="Status";
+    private String rom = "Status";
+    public Menu menu;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -95,13 +99,11 @@ public class MainActivity extends Activity {
         pDialog = ProgressDialog.show(context, "Downloading/Preparing Data..",
                 "Please wait", true, false);
 
-        final DownloadXML[] array = new DownloadXML[(Data.xml).length];
+        final DownloadXML DownloadThread;
 
-        for (int i = 0; i <= (Data.xml).length - 1; i++) {
-            Log.w("TESCIK", String.valueOf(i));
-            array[i] = new DownloadXML(i, context, false);
-            (array[i]).start();
-        }
+        Log.w("TESCIK", "");
+        DownloadThread = new DownloadXML(context, false);
+        DownloadThread.start();
 
         new Thread() {
             public void run() {
@@ -110,19 +112,18 @@ public class MainActivity extends Activity {
 
                 dataList.add(new DrawerItem("Status"));
 
-                for (int i = 0; i <= (Data.xml).length - 1; i++) {
-                    try {
-                        array[i].join();
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+                try {
+                    DownloadThread.join();
+                } catch (InterruptedException e) {
+                    Toast.makeText(getApplicationContext(), "ERROR" + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
                 }
 
+                Log.w("START:", "pliki");
                 BufferedReader xml;
                 StringBuilder total = null;
                 try {
-                    File file = new File(context.getFilesDir(), Data.xml[0]);
+                    File file = new File(context.getFilesDir(), "rom.xml");
                     InputStream inputStream = new FileInputStream(file);
                     xml = new BufferedReader(new InputStreamReader(inputStream));
                     total = new StringBuilder();
@@ -136,20 +137,21 @@ public class MainActivity extends Activity {
                 }
 
                 XMLParser parser = new XMLParser();
-                Document doc = parser.getDomElement(total.toString()); // getting
-                // DOM
-                // element
+                Document doc = parser.getDomElement(total.toString());
                 NodeList nl = doc.getElementsByTagName(KEY_ITEM);
 
                 for (int i = 0; i < nl.getLength(); i++) {
                     Element e = (Element) nl.item(i);
-                    dataList.add(new DrawerItem(parser.getValue(e, "name")));
+                    NodeList n = e.getElementsByTagName("name");
+                    dataList.add(new DrawerItem(parser.getElementValue(n.item(0))));
                 }
-                pDialog.dismiss();
+
+
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        pDialog.dismiss();
                         CustomDrawerAdapter adapter = new CustomDrawerAdapter(
                                 context, R.layout.custom_drawer_item, dataList);
                         mDrawerList.setAdapter(adapter);
@@ -190,6 +192,7 @@ public class MainActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.main, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -204,11 +207,11 @@ public class MainActivity extends Activity {
             public void run() {
 
                 Fragment fragment;
-
                 final Bundle args = new Bundle();
 
                 if (possition == 0) {
                     fragment = new Status();
+//                    item.setVisible(false);
                 } else {
                     fragment = new ROMList();
                     args.putString(ROMList.ROM_NAME, dataList.get(possition)
@@ -270,20 +273,16 @@ public class MainActivity extends Activity {
                             }
                         });
 
-                        DownloadXML[] array = new DownloadXML[(Data.xml).length];
+                        DownloadXML array;
 
-                        for (int i = 0; i <= (Data.xml).length - 1; i++) {
-                            array[i] = new DownloadXML(i, context, true);
-                            (array[i]).start();
-                        }
+                        array = new DownloadXML(context, true);
+                        (array).start();
 
-                        for (int i = 0; i <= (Data.xml).length - 1; i++) {
-                            try {
-                                array[i].join();
-                            } catch (InterruptedException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
+                        try {
+                            array.join();
+                        } catch (InterruptedException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
                         }
 
                         runOnUiThread(new Runnable() {
@@ -318,16 +317,11 @@ public class MainActivity extends Activity {
                 break;
 
             case R.id.changelog_dialog:
-
-                if (rom.equals("CM")){
-                    Builder builder = new AlertDialog.Builder(this);
-                    builder.setMessage(getString(R.string.CMChangelog));
-                    builder.setCancelable(true);
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
-
-
+                Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(getString(R.string.AppChangelog));
+                builder.setCancelable(true);
+                AlertDialog dialog = builder.create();
+                dialog.show();
                 break;
         }
 
@@ -348,13 +342,11 @@ public class MainActivity extends Activity {
 
     private class DownloadXML extends Thread {
 
-        final int i;
         final MainActivity context;
         final boolean deletefile;
 
-        public DownloadXML(int i, MainActivity context, boolean deletefile) {
+        public DownloadXML(MainActivity context, boolean deletefile) {
 
-            this.i = i;
             this.context = context;
             this.deletefile = deletefile;
         }
@@ -363,8 +355,8 @@ public class MainActivity extends Activity {
 
             int count;
             try {
-                URL url = new URL(Data.downloadxml[i]);
-                File file = new File(context.getFilesDir(), Data.xml[i]);
+                URL url = new URL(Data.downloadxml);
+                File file = new File(context.getFilesDir(), Data.xml);
                 if (deletefile)
                     file.delete();
                 if (!(file.exists())) {
@@ -390,14 +382,46 @@ public class MainActivity extends Activity {
                     // closing streams
                     output.close();
                     input.close();
-                    Log.w("Pobrano: ", String.valueOf(i));
+                    Log.w("Pobrano: ", "");
+
+
+                    Thread extract = new Thread() {
+                        public void run() {
+                            String command = "tar -zxvf " + context.getFilesDir() + "/rom.tar.gz";
+
+                            Log.w("EXTRACT COMMAND:", command);
+
+                            try {
+                                Process process = Runtime.getRuntime().exec("su");
+                                DataOutputStream out = new DataOutputStream(process.getOutputStream());
+                                out.writeBytes("cd " + context.getFilesDir() + "\n");
+                                out.writeBytes("rm -rf *.xml\n");
+                                out.writeBytes("tar -zxvf rom.tar.gz\n");
+                                out.writeBytes("exit\n");
+                                out.flush();
+                                process.waitFor();
+                                Log.w("KONIEC:", "runtime");
+                            } catch (IOException e) {
+                                Log.w("EXTRACT ERROR:", e.getMessage());
+                            } catch (InterruptedException e) {
+                                Log.w("EXTRACT ERROR:", e.getMessage());
+                            }
+                        }
+                    };
+
+                    extract.start();
+                    try {
+                        extract.join();
+                    } catch (InterruptedException e) {
+                        Log.w("THREAD ERROR:", e.getMessage());
+                    }
 
                 }
             } catch (Exception e) {
                 Log.e("Error: ", e.getMessage());
             }
 
-            Log.w("Zakonczono: ", String.valueOf(i));
+            Log.w("Zakonczono: ", "");
         }
     }
 
