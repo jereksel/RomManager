@@ -34,8 +34,8 @@
         android:onClick="DownloadWhole"
         android:text="@string/download_whole_rom_button"
         android:layout_above="@+id/incremental"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_centerHorizontal="true"
+        android:width="200dp" />
 
     <Button
         android:id="@+id/incremental"
@@ -44,8 +44,8 @@
         android:text="@string/download_incremental_update_button"
         android:onClick="DownloadIncremental"
         android:layout_above="@+id/button"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_centerHorizontal="true"
+        android:width="200dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -54,8 +54,8 @@
         android:onClick="ShowChangelog"
         android:id="@+id/button"
         android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_centerHorizontal="true"
+        android:width="200dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -64,7 +64,8 @@
         android:onClick="GoToXDA"
         android:id="@+id/button2"
         android:layout_above="@+id/whole"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/rom_author"
+        android:layout_centerHorizontal="true"
+        android:width="200dp" />
 
 </RelativeLayout>
