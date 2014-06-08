@@ -9,8 +9,6 @@
     <string name="download_whole_rom_button">Download whole rom</string>
     <string name="download_incremental_update_button">Download incremental update</string>
     <string name="lcd_type">LCD type:</string>
-    <string name="title_activity_about_screen">AboutScreen</string>
-    <string name="action_settings">Settings</string>
     <string name="about">About</string>
     <string name="about_header">About RomManager</string>
     <string name="about_text">This application allows you to download ROM\'s and ROM\'s updates for Samsung Galaxy Ace 2.</string>
