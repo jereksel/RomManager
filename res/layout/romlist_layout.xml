@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/title_test"
-        style="?android:attr/listSeparatorTextViewStyle"
-        android:text="CyanogenMod 11.0" />
+    <!--
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/title_test"
+            style="?android:attr/listSeparatorTextViewStyle"
+            android:text="CyanogenMod 11.0" />
+    -->
 
     <ListView
-        android:id="@+id/listview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:clickable="true"
-        android:layout_below="@+id/title_test" />
+            android:id="@+id/listview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:clickable="true" />
+    <!--
+    android:layout_below="@+id/title_test"
+     -->
 
 </RelativeLayout>
